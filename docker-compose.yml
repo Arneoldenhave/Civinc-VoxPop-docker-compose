@@ -1,0 +1,42 @@
+version: "3"
+services:
+
+  mongo:
+    image: mongo
+    container_name: "mongo"
+    ports: 
+      - "27017:27017"
+    volumes:
+      #- ./database/db.js:/docker-entrypoint-initdb.d/db.js:ro
+      - ./mongo-volume:/data/db
+      
+    #environment:
+     # MONGO_INITDB_ROOT_USERNAME: arnosaurus
+     # MONGO_INITDB_ROOT_PASSWORD: hondman
+  client:
+    container_name: vox_pop_client
+    image: arneoldenhave/voxpop:client
+    build: 
+      context: ./client
+      dockerfile: Dockerfile.dev
+    ports: 
+      - "3000:3000"
+    volumes:
+      - /app/node_modules
+      - .:/client 
+  server:
+    container_name: vox_pop_server
+    image: arneoldenhave/voxpop:server
+    build:
+      context: ./server
+      dockerfile: Dockerfile.dev
+    ports: 
+      - "5000:5000"
+    volumes:
+      - ./server
+      - '/app/node_modules'
+    environment:
+      MONGODB_URI: mongodb://mongo
+      #mongodb://mongo
+      #ME_CONFIG_MONGODB_ADMINUSERNAME: arnosaurus
+      #ME_CONFIG_MONGODB_ADMINPASSWORD: hondman
