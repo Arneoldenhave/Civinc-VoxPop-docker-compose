@@ -2,7 +2,8 @@ client
 mongo-volume
 server
 database
-ScheduleManager
+scheduleManager
 matchmaking
 socketModule
+schedManager
 
